@@ -52,6 +52,8 @@ local function ListMap()
             i = i + 1
             key = keys[i]
 
+            if key == nil then return nil end
+
             return i, map[key]
         end
     end
@@ -63,6 +65,8 @@ local function ListMap()
         return function()
             i = i + 1
             key = keys[i]
+
+            if key == nil then return nil end
             
             return key, map[key]
         end
