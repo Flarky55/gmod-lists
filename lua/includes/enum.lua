@@ -1,11 +1,22 @@
 local function enum(names)
-    assert( table.IsSequential(names), "bad argument #1 ('names' should be a sequntial table)" )
+    assert( table.IsSequential(names), "enum must be a sequential table" )
 
+    local len = #names
+    assert( len >= 2, "enum must contain at least 2 members" )
 
-    local instance, mt = newproxy(), {}
-    debug.setmetatable(instance, mt)
-    
-    local list, defined, len = {}, {}, #names
+    local list, defined = {}, {}
+
+    for i = 1, len do
+        local name = names[i]
+        assert( list[name] == nil, "duplicate name: " .. name )
+
+        local n = i - 1
+
+        list[name] = n
+        defined[n] = true
+    end
+
+    local mt = {}
     local index = {}
 
     function mt:__len()
@@ -24,18 +35,10 @@ local function enum(names)
         return defined[k] == true
     end
 
-    local _, bits = math.frexp(len - 1)
-    index.bits = bits
-
-
-    for i = 1, len do
-        local name = names[i]
-        local n = i - 1
-
-        list[name] = n
-        defined[n] = true
-    end
+    index.bits = math.ceil(math.log(len, 2))
     
+    local instance = newproxy()
+    debug.setmetatable(instance, mt)
 
     return instance
 end
