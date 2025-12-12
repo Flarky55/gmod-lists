@@ -1,5 +1,5 @@
 local function queue()
-    local instance, mt = newproxy(true), {}
+    local instance, mt = newproxy(), {}
     debug.setmetatable(instance, mt)
 
 
