@@ -16,8 +16,7 @@ local function map()
 
     function mt:__newindex(k, v)
         if v == nil then
-            local value = list[k]
-            if value == nil then return end
+            if list[k] == nil then return end
 
             list[k] = nil
 
@@ -42,9 +41,9 @@ local function map()
             positions[k] = len
 
             list[k] = v
+        else
+            list[k] = v
         end
-
-        list[k] = v
     end
 
     index.ipairs = function()
