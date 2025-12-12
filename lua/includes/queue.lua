@@ -11,21 +11,41 @@ local function queue()
 
     local index = {}; mt.__index = index
 
-    index.enqueue = function(item)
+    index.enqueue = function(self, item)
+        local pos = offset + len
+        
+        list[pos] = item
+        
         len = len + 1
-        list[len] = item
+
+        return pos
     end
 
-    index.dequeue = function(n)
+    index.dequeue = function()
         if len == 0 then return nil end
 
         local item = list[offset]
+        
         list[offset] = nil
 
         offset = offset + 1
-
         len = len - 1
     
+        return item
+    end
+
+    index.remove = function(self, n)
+        local item = list[n]
+        if item == nil then return nil end
+
+        list[n] = nil
+
+        for i = n + 1, offset + len - 1 do
+            list[i - 1] = list[i]
+        end
+
+        len = len - 1
+
         return item
     end
 
