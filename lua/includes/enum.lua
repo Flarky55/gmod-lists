@@ -3,7 +3,7 @@ local function enum(names)
     debug.setmetatable(instance, mt)
 
     
-    local list, defined, len = {}, {}, 0
+    local list, defined, len = {}, {}, #names
     local index = {}
 
     function mt:__len()
@@ -22,8 +22,17 @@ local function enum(names)
         return defined[k] == true
     end
 
-    local _, bits = math.frexp(#names - 1)
+    local _, bits = math.frexp(len - 1)
     index.bits = bits
+
+
+    for i = 1, len do
+        local name = names[i]
+        local n = i - 1
+
+        list[name] = n
+        defined[n] = true
+    end
     
 
     return instance
