@@ -2,7 +2,6 @@ local function map()
     local instance, mt = newproxy(), {}
     debug.setmetatable(instance, mt)
 
-
     local list, keys, positions, len = {}, {}, {}, 0
     local index = {}
 

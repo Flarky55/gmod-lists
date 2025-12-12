@@ -1,7 +1,9 @@
 local function enum(names)
+    assert( table.IsSequential(names), "bad argument #1 ('names' should be a sequntial table)" )
+
+
     local instance, mt = newproxy(), {}
     debug.setmetatable(instance, mt)
-
     
     local list, defined, len = {}, {}, #names
     local index = {}

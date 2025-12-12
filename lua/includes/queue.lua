@@ -2,14 +2,14 @@ local function queue()
     local instance, mt = newproxy(), {}
     debug.setmetatable(instance, mt)
 
-
     local list, offset, len = {}, 1, 0
-
+    local index = {}
+    
     function mt:__len()
         return len
     end
 
-    local index = {}; mt.__index = index
+    mt.__index = index
 
     index.enqueue = function(self, item)
         local pos = offset + len
