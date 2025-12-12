@@ -1,32 +1,33 @@
+local mt = {}
+mt.__index = mt
+
+local methods = {}
+
+function mt:__index(k)
+    return methods[k] or self.list[k]
+end
+
+function mt:__newindex()
+    error("enum is immutable!")
+end
+
+
+function methods:is_defined(v)
+    return self.defined[v] == true
+end
+
+
 local function enum(names)
-    local instance, mt = newproxy(), {}
-    debug.setmetatable(instance, mt)
-
+    local list, defined = {}, {}
     
-    local list, defined, len = {}, {}, 0
-    local index = {}
+    for i, name in ipairs(names) do
+        list[name] = i-1
+        defined[i-1] = true
+    end 
 
-    function mt:__len()
-        return len
-    end
+    local _, bits = math.frexp(#names)
     
-    function mt:__index(k)
-        return index[k] or list[k]
-    end
-
-    function mt:__newindex()
-        error("enum is immutable!")
-    end
-    
-    index.is_defined = function(self, k)
-        return defined[k] == true
-    end
-
-    local _, bits = math.frexp(#names - 1)
-    index.bits = bits
-    
-
-    return instance
+    return setmetatable({list = list, defined = defined, bits = bits}, mt)
 end
 
 _G.enum = enum
